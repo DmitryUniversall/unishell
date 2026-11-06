@@ -3,6 +3,7 @@ package main
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -15,15 +16,20 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import core.Shell
+import main.configuration.AppConfiguration
+import main.scripting.StartupScriptRunner
 import main.ui.screens.TerminalScreen
 
 private const val uiScale = 1.6f
 
 class AppHost(
     private val shell: Shell,
-    private val vfsName: String,
+    private val configuration: AppConfiguration,
+    private val startupScriptRunner: StartupScriptRunner,
 ) {
     fun run() = application {
+        val vfsName = configuration.vfsName
+
         Window(
             onCloseRequest = ::exitApplication,
             title = "unishell - VFS: $vfsName",
@@ -32,7 +38,18 @@ class AppHost(
             val lines = remember {
                 mutableStateListOf(
                     "unishell - VFS: $vfsName",
+                    *diagnostics().toTypedArray(),
                 )
+            }
+
+            LaunchedEffect(Unit) {
+                diagnostics().forEach(::println)
+                val scriptPath = configuration.scriptPath
+
+                if (scriptPath != null) {
+                    val result = startupScriptRunner.run(scriptPath) { lines.add(it) }
+                    if (result.shouldExit) exitApplication()
+                }
             }
 
             var inputText by remember { mutableStateOf("") }
@@ -66,4 +83,10 @@ class AppHost(
             }
         }
     }
+
+    private fun diagnostics(): List<String> = listOf(
+        "VFS path: ${configuration.vfsPath ?: "<not set>"}",
+        "Startup script: ${configuration.scriptPath ?: "<not set>"}",
+        "Configuration file: ${configuration.configPath ?: "<not set>"}",
+    )
 }

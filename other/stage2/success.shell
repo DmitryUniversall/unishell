@@ -1,0 +1,5 @@
+ls
+ls "/documents and notes"
+cd /docs
+ls '$HOME'
+cd "$HOME"
