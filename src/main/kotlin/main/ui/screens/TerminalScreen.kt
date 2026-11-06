@@ -1,4 +1,4 @@
-package ui.screens
+package main.ui.screens
 
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.defaultScrollbarStyle

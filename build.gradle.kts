@@ -23,6 +23,6 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "Unishell"
+        mainClass = "main.Unishell"
     }
 }
