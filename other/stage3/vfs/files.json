@@ -1,0 +1,21 @@
+{
+    "name": "files",
+    "children": [
+        {
+            "type": "file",
+            "name": "readme.txt",
+            "content": "Hello from VFS\n"
+        },
+        {
+            "type": "file",
+            "name": "lines.txt",
+            "content": "apple\napple\nbanana\nbanana\napple\n"
+        },
+        {
+            "type": "file",
+            "name": "data.bin",
+            "encoding": "base64",
+            "content": "AAECA/8="
+        }
+    ]
+}

@@ -1,0 +1,39 @@
+{
+    "name": "deep",
+    "children": [
+        {
+            "type": "directory",
+            "name": "docs",
+            "children": [
+                {
+                    "type": "directory",
+                    "name": "projects",
+                    "children": [
+                        {
+                            "type": "directory",
+                            "name": "shell",
+                            "children": [
+                                {
+                                    "type": "file",
+                                    "name": "notes.txt",
+                                    "content": "Three nested directories\n"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "directory",
+            "name": "my notes",
+            "children": [
+                {
+                    "type": "file",
+                    "name": "todo.txt",
+                    "content": "Read\nWrite\n"
+                }
+            ]
+        }
+    ]
+}

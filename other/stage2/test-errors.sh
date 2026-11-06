@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo 'Unknown command'
-./gradlew run '--args=--vfs other/stage2/demo-vfs.json --script other/stage2/error.shell'
+./gradlew run '--args=--vfs other/stage3/vfs/minimal.json --script other/stage2/error.shell'
 
 echo 'Bad quotes'
 ./gradlew run '--args=--script other/stage2/parse-error.shell'

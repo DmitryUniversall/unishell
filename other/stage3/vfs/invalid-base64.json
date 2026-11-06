@@ -1,0 +1,11 @@
+{
+    "name": "invalid base64",
+    "children": [
+        {
+            "type": "file",
+            "name": "data.bin",
+            "encoding": "base64",
+            "content": "???"
+        }
+    ]
+}

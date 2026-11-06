@@ -1,0 +1,10 @@
+ls
+ls /
+ls /docs/projects/shell
+ls "my notes"
+ls '$HOME'
+ls "$HOME"
+cd /
+cd docs
+cd ..
+exit

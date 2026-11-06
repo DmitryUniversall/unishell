@@ -16,6 +16,10 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import core.Shell
+import core.vfs.VfsDirectory
+import core.vfs.VfsFile
+import core.vfs.VfsNode
+import core.vfs.VirtualFileSystem
 import main.configuration.AppConfiguration
 import main.scripting.StartupScriptRunner
 import main.ui.screens.TerminalScreen
@@ -25,10 +29,11 @@ private const val uiScale = 1.6f
 class AppHost(
     private val shell: Shell,
     private val configuration: AppConfiguration,
+    private val fileSystem: VirtualFileSystem,
     private val startupScriptRunner: StartupScriptRunner,
 ) {
     fun run() = application {
-        val vfsName = configuration.vfsName
+        val vfsName = fileSystem.name
 
         Window(
             onCloseRequest = ::exitApplication,
@@ -39,15 +44,19 @@ class AppHost(
                 mutableStateListOf(
                     "unishell - VFS: $vfsName",
                     *diagnostics().toTypedArray(),
+                    *vfsLines(fileSystem.root).toTypedArray(),
                 )
             }
 
             LaunchedEffect(Unit) {
-                diagnostics().forEach(::println)
+                lines.forEach(::println)
                 val scriptPath = configuration.scriptPath
 
                 if (scriptPath != null) {
-                    val result = startupScriptRunner.run(scriptPath) { lines.add(it) }
+                    val result = startupScriptRunner.run(scriptPath) { line ->
+                        lines.add(line)
+                        println(line)
+                    }
                     if (result.shouldExit) exitApplication()
                 }
             }
@@ -89,4 +98,12 @@ class AppHost(
         "Startup script: ${configuration.scriptPath ?: "<not set>"}",
         "Configuration file: ${configuration.configPath ?: "<not set>"}",
     )
+
+    private fun vfsLines(node: VfsNode, indent: String = ""): List<String> = when (node) {
+        is VfsFile -> listOf("$indent${node.name} (${node.content.size} bytes)")
+        is VfsDirectory -> buildList {
+            add("$indent${node.name}/")
+            for (child in node.children.values) addAll(vfsLines(child, "$indent  "))
+        }
+    }
 }

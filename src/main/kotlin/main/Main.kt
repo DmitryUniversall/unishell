@@ -3,8 +3,10 @@
 package main
 
 import core.Shell
+import core.vfs.VirtualFileSystem
 import java.nio.file.Path
 import kotlin.system.exitProcess
+import kotlinx.serialization.json.Json
 import main.commands.CdCommand
 import main.commands.ExitCommand
 import main.commands.LsCommand
@@ -16,6 +18,9 @@ import main.io.Utf8TextFileReader
 import main.resolution.MapCommandResolver
 import main.resolution.MapEnvironmentResolver
 import main.scripting.FileStartupScriptRunner
+import main.vfs.JsonVfsLoader
+import main.vfs.VfsLoader
+import main.vfs.json.JsonVfsParser
 
 fun main(args: Array<String>) {
     val fileReader = Utf8TextFileReader()
@@ -35,6 +40,15 @@ fun main(args: Array<String>) {
         exitProcess(1)
     }
 
+    val json = Json { classDiscriminator = "type" }
+    val vfsLoader: VfsLoader = JsonVfsLoader(fileReader, JsonVfsParser(json))
+    val fileSystem = try {
+        configuration.vfsPath?.let(vfsLoader::load) ?: VirtualFileSystem("default")
+    } catch (exception: IllegalArgumentException) {
+        System.err.println("Error: ${exception.message}")
+        exitProcess(1)
+    }
+
     val shell = Shell(
         environmentResolver = MapEnvironmentResolver(System.getenv()),
         commandResolver = MapCommandResolver(listOf(LsCommand(), CdCommand(), ExitCommand())),
@@ -44,6 +58,7 @@ fun main(args: Array<String>) {
     AppHost(
         shell = shell,
         configuration = configuration,
+        fileSystem = fileSystem,
         startupScriptRunner = FileStartupScriptRunner(shell, fileReader),
     ).run()
 }
