@@ -1,0 +1,28 @@
+pwd
+mkdir work/
+pwd
+ls
+cd work
+pwd
+mkdir notes
+mkdir "draft files"
+ls
+cd notes
+pwd
+mkdir ../backup
+ls ..
+cd "../draft files"
+pwd
+mkdir /archive
+ls /
+cd /
+pwd
+mkdir archive/2026
+ls archive
+cd /archive/2026
+pwd
+cd ../..
+pwd
+cat hello.txt
+uniq lines.txt
+exit

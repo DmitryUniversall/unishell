@@ -9,12 +9,28 @@ import core.vfs.VirtualFileSystem
 class InMemoryVfsSession(private val fileSystem: VirtualFileSystem) : VfsSession {
     private var currentDirectory: List<VfsNode> = listOf(fileSystem.root)
 
+    override val currentPath: String
+        get() = currentDirectory.drop(1).joinToString("/", prefix = "/") { it.name }
+
     override fun resolve(path: String): VfsNode = walk(path).last()
 
     override fun changeDirectory(path: String) {
         val nodes = walk(path)
         require(nodes.last() is VfsDirectory) { "Not a directory: $path" }
         currentDirectory = nodes
+    }
+
+    override fun createDirectory(path: String) {
+        val directoryPath = path.trimEnd('/')
+        val name = directoryPath.substringAfterLast('/')
+        require(name.isNotBlank() && name != "." && name != "..") { "Invalid directory name: $path" }
+
+        val parentPath = directoryPath.substringBeforeLast('/', ".").ifEmpty { "/" }
+        val parent = resolve(parentPath)
+        require(parent is VfsDirectory) { "Not a directory: $parentPath" }
+        require(name !in parent.children) { "File exists: $path" }
+
+        parent.children[name] = VfsDirectory(name)
     }
 
     override fun readFile(path: String): ByteArray {

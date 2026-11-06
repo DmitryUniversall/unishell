@@ -11,6 +11,8 @@ import main.commands.CatCommand
 import main.commands.CdCommand
 import main.commands.ExitCommand
 import main.commands.LsCommand
+import main.commands.MkdirCommand
+import main.commands.PwdCommand
 import main.commands.UniqCommand
 import main.configuration.CommandLineParser
 import main.configuration.ConfigurationLoader
@@ -58,8 +60,10 @@ fun main(args: Array<String>) {
         commandResolver = MapCommandResolver(listOf(
             LsCommand(vfsSession),
             CdCommand(vfsSession),
+            PwdCommand(vfsSession),
             CatCommand(vfsSession),
             UniqCommand(vfsSession),
+            MkdirCommand(vfsSession),
             ExitCommand(),
         )),
         commandExecutor = DefaultCommandExecutor(),
