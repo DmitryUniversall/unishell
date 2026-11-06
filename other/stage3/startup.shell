@@ -1,10 +1,9 @@
 ls
 ls /
-ls /docs/projects/shell
-ls "my notes"
-ls '$HOME'
-ls "$HOME"
+ls "."
+ls '..'
 cd /
-cd docs
+cd .
 cd ..
+ls
 exit

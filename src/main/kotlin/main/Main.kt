@@ -7,9 +7,11 @@ import core.vfs.VirtualFileSystem
 import java.nio.file.Path
 import kotlin.system.exitProcess
 import kotlinx.serialization.json.Json
+import main.commands.CatCommand
 import main.commands.CdCommand
 import main.commands.ExitCommand
 import main.commands.LsCommand
+import main.commands.UniqCommand
 import main.configuration.CommandLineParser
 import main.configuration.ConfigurationLoader
 import main.configuration.IniConfigParser
@@ -18,6 +20,7 @@ import main.io.Utf8TextFileReader
 import main.resolution.MapCommandResolver
 import main.resolution.MapEnvironmentResolver
 import main.scripting.FileStartupScriptRunner
+import main.vfs.InMemoryVfsSession
 import main.vfs.JsonVfsLoader
 import main.vfs.VfsLoader
 import main.vfs.json.JsonVfsParser
@@ -49,9 +52,16 @@ fun main(args: Array<String>) {
         exitProcess(1)
     }
 
+    val vfsSession = InMemoryVfsSession(fileSystem)
     val shell = Shell(
         environmentResolver = MapEnvironmentResolver(System.getenv()),
-        commandResolver = MapCommandResolver(listOf(LsCommand(), CdCommand(), ExitCommand())),
+        commandResolver = MapCommandResolver(listOf(
+            LsCommand(vfsSession),
+            CdCommand(vfsSession),
+            CatCommand(vfsSession),
+            UniqCommand(vfsSession),
+            ExitCommand(),
+        )),
         commandExecutor = DefaultCommandExecutor(),
     )
 

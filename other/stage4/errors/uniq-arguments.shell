@@ -1,0 +1,2 @@
+uniq lines.txt lines.txt
+exit

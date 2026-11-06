@@ -1,0 +1,26 @@
+ls
+ls /
+ls docs/
+ls /docs/notes.txt
+cat hello.txt
+cat hello.txt docs/notes.txt
+cat "my notes/todo.txt"
+cat encoded.txt
+cat empty.txt
+uniq lines.txt
+uniq empty.txt
+cd docs
+ls
+cat notes.txt
+cd nested
+ls .
+cat more.txt
+cat ../../hello.txt
+cd ..
+ls
+cd "/my notes"
+cat todo.txt
+cd /
+cd ..
+ls .
+exit

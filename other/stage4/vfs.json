@@ -1,0 +1,59 @@
+{
+    "name": "commands",
+    "children": [
+        {
+            "type": "file",
+            "name": "hello.txt",
+            "content": "Hello from VFS\n"
+        },
+        {
+            "type": "file",
+            "name": "lines.txt",
+            "content": "apple\napple\nbanana\nbanana\napple\n"
+        },
+        {
+            "type": "file",
+            "name": "empty.txt",
+            "content": ""
+        },
+        {
+            "type": "file",
+            "name": "encoded.txt",
+            "encoding": "base64",
+            "content": "SGVsbG8gZnJvbSBiYXNlNjQK"
+        },
+        {
+            "type": "directory",
+            "name": "docs",
+            "children": [
+                {
+                    "type": "file",
+                    "name": "notes.txt",
+                    "content": "Notes from docs\n"
+                },
+                {
+                    "type": "directory",
+                    "name": "nested",
+                    "children": [
+                        {
+                            "type": "file",
+                            "name": "more.txt",
+                            "content": "More notes\n"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "directory",
+            "name": "my notes",
+            "children": [
+                {
+                    "type": "file",
+                    "name": "todo.txt",
+                    "content": "Read\nWrite\n"
+                }
+            ]
+        }
+    ]
+}
